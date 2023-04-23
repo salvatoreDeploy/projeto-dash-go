@@ -24,7 +24,7 @@ export function Sidebar() {
             <Link display="flex" textAlign="center">
               <Icon as={RiContactsLine} fontSize="20"></Icon>
               <Text ml="4" fontWeight="medium">
-                Usuarios
+                Projetos
               </Text>
             </Link>
           </Stack>

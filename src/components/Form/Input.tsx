@@ -3,7 +3,10 @@ import {
   FormLabel,
   Input as ChackraInput,
   InputProps as ChakraInputProps,
+  Icon,
 } from "@chakra-ui/react";
+import { IconType } from "react-icons";
+import { RiCalendarLine } from "react-icons/ri";
 
 interface InputProps extends ChakraInputProps {
   name: string;
@@ -18,7 +21,6 @@ export function Input({ name, label, ...props }: InputProps) {
       <ChackraInput
         id={name}
         name={name}
-        type="email"
         focusBorderColor="pink.500"
         bgColor="gray.900"
         variant="filled"
