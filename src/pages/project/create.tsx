@@ -13,6 +13,7 @@ import Header from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { Input } from "../../components/Form/Input";
 import { Select } from "../../components/Form/Select";
+import Link from "next/link";
 
 export default function RegisterProject() {
   return (
@@ -48,9 +49,11 @@ export default function RegisterProject() {
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
-              <Button color="white" bgColor="gray.500">
-                Cancelar
-              </Button>
+              <Link href="/project">
+                <Button color="white" bgColor="gray.500">
+                  Cancelar
+                </Button>
+              </Link>
               <Button
                 color="white"
                 bgColor="pink.500"

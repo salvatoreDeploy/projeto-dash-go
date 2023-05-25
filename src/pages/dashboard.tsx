@@ -19,11 +19,11 @@ export default function Dashboard() {
         <SimpleGrid
           flex="1"
           gap="4"
-          minChildWidth="380px"
+          minChildWidth={["300px", "380px"]}
           alignItems="flex-start"
         >
           <Box
-            p="6"
+            p={["6", "8"]}
             bg="gray.800"
             borderRadius={8}
             maxHeight={400} /* pb="8" */
@@ -38,7 +38,7 @@ export default function Dashboard() {
             />
           </Box>
           <Box
-            p="6"
+            p={["6", "8"]}
             bg="gray.800"
             borderRadius={8}
             maxHeight={400} /* pb="8" */
@@ -53,7 +53,7 @@ export default function Dashboard() {
             />
           </Box>
           <Box
-            p="6"
+            p={["6", "8"]}
             bg="gray.800"
             borderRadius={8}
             maxHeight={400} /* pb="8" */
@@ -64,7 +64,7 @@ export default function Dashboard() {
             <Chart options={optionsBar} series={optionsBar.series} type="bar" />
           </Box>
           <Box
-            p="6"
+            p={["6", "8"]}
             bg="gray.800"
             borderRadius={8}
             maxHeight={400} /* pb="8" */

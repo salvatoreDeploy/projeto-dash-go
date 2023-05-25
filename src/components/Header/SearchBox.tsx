@@ -1,7 +1,17 @@
 import { Flex, Icon, Input } from "@chakra-ui/react";
+import { useRef, useState } from "react";
 import { RiSearch2Line } from "react-icons/ri";
 
 export function SearchBox() {
+  /* Controlled Compononent */
+  // const [search, setSearch] = useState("");
+
+  /* Uncontrolled Components Inperative */
+  /* Inperative vs Declarative */
+
+  const searchInputsRef = useRef<HTMLInputElement>();
+  // console.log(searchInputsRef.current.value);
+
   return (
     <Flex
       as="label"
@@ -23,6 +33,7 @@ export function SearchBox() {
         mr="4"
         placeholder="Buscar na Plataforma"
         _placeholder={{ color: "gray.400" }}
+        ref={searchInputsRef}
       />
       <Icon as={RiSearch2Line} fontSize="20" />
     </Flex>

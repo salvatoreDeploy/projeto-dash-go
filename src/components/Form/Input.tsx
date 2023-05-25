@@ -5,15 +5,17 @@ import {
   InputProps as ChakraInputProps,
   Icon,
 } from "@chakra-ui/react";
-import { IconType } from "react-icons";
-import { RiCalendarLine } from "react-icons/ri";
+import { forwardRef, ForwardRefRenderFunction } from "react";
 
 interface InputProps extends ChakraInputProps {
   name: string;
   label?: string;
 }
 
-export function Input({ name, label, ...props }: InputProps) {
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
+  { name, label, ...props },
+  ref
+) => {
   return (
     <FormControl>
       {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
@@ -26,8 +28,11 @@ export function Input({ name, label, ...props }: InputProps) {
         variant="filled"
         _hover={{ bgColor: "gray.900" }}
         size="lg"
+        ref={ref}
         {...props}
       />
     </FormControl>
   );
-}
+};
+
+export const Input = forwardRef(InputBase);

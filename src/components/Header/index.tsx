@@ -29,7 +29,7 @@ export default function Header() {
           variant="unstyled"
           onClick={onOpen}
           aria-label="Open Menu Navigation"
-          mr="2"
+          mr="1"
         ></IconButton>
       )}
       <Logo />
