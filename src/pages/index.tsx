@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Flex, Stack, FormLabel } from "@chakra-ui/react";
 import { Input } from "../components/Form/Input";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { resolve } from "path";
 
 type SignInFormParamData = {
@@ -12,10 +12,14 @@ type SignInFormParamData = {
 export default function SignIn() {
   const { register, handleSubmit, formState } = useForm();
 
+  const { errors } = formState;
+
+  // console.log(errors);
+
   const handleSignIn: SubmitHandler<SignInFormParamData> = async (value) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log(value);
+    // console.log(value);
   };
 
   return (
@@ -35,13 +39,15 @@ export default function SignIn() {
             name="email"
             type="email"
             label="E-mail"
+            error={errors.email as FieldError}
             {...register("email")}
           ></Input>
           <Input
             name="password"
             type="password"
             label="Senha"
-            {...register("password")}
+            error={errors.password as FieldError}
+            {...register("password", { required: "E-mail obrigatorio" })}
           />
         </Stack>
         <Button
