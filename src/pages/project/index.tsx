@@ -34,9 +34,8 @@ export default function ProjectsList() {
             <Heading size="lg" fontWeight="normal">
               Projetos :
             </Heading>
-            <Link href="/project/create">
+            <Link href="/project/create" passHref>
               <Button
-                as="a"
                 size="sm"
                 fontSize="sm"
                 bgColor="pink.500"

@@ -21,8 +21,9 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> = (
 ) => {
   return (
     <FormControl isInvalid={!!error}>
-      {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-
+      <FormLabel>
+        {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+      </FormLabel>
       <SelectChakra
         id={name}
         name={name}
