@@ -3,20 +3,26 @@ import {
   FormLabel,
   Select as SelectChakra,
   SelectProps as ChakraSelectProps,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { forwardRef, ForwardRefRenderFunction } from "react";
+import { FieldError } from "react-hook-form";
 
 interface SelectProps extends ChakraSelectProps {
   name: string;
   label?: string;
+  error?: FieldError;
   children: React.ReactNode;
 }
 
-export function Select({ name, label, children, ...props }: SelectProps) {
+const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> = (
+  { name, label, error = null, children, ...props },
+  ref
+) => {
   return (
-    <FormControl>
-      <FormLabel>
-        {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      </FormLabel>
+    <FormControl isInvalid={!!error}>
+      {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+
       <SelectChakra
         id={name}
         name={name}
@@ -25,9 +31,14 @@ export function Select({ name, label, children, ...props }: SelectProps) {
         variant="filled"
         _hover={{ bgColor: "gray.900" }}
         size="lg"
+        ref={ref}
+        {...props}
       >
         {children}
       </SelectChakra>
+      {!!error && <FormErrorMessage>{error.message}</FormErrorMessage>}
     </FormControl>
   );
-}
+};
+
+export const Select = forwardRef(SelectBase);
