@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Flex,
+  HStack,
   Heading,
   Icon,
   LightMode,
@@ -19,13 +20,14 @@ import {
 import Header from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { TfiReload } from "react-icons/tfi";
 import Pagination from "../../components/Pagination";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useQuery } from "react-query";
 
 export default function ProjectsList() {
-  const { data, isLoading, error } = useQuery(
+  const { data, isLoading, isFetching, error, refetch } = useQuery(
     "projects",
     async () => {
       const response = await fetch("http://localhost:3000/api/projects");
@@ -50,11 +52,15 @@ export default function ProjectsList() {
       });
 
       return projects;
-    },
-    { staleTime: 1000 * 5 } // 5 segundos
+    }
+    // { staleTime: 1000 * 5 } // 5 segundos
   );
 
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
+
+  const handleButtonClick = useCallback(() => {
+    refetch(); // Chama a função refetch para buscar novamente os dados
+  }, [refetch]);
 
   return (
     <Box>
@@ -66,17 +72,37 @@ export default function ProjectsList() {
             <Heading size="lg" fontWeight="normal">
               Projetos :
             </Heading>
-            <Link href="/project/create" passHref>
-              <Button
-                size="sm"
-                fontSize="sm"
-                bgColor="pink.500"
-                _hover={{ bg: "pink.700" }}
-                leftIcon={<Icon as={RiAddLine} />}
-              >
-                Cadastrar novo
-              </Button>
-            </Link>
+            <Flex justify="flex-end">
+              <HStack>
+                <Button
+                  size="sm"
+                  fontSize="sm"
+                  bgColor="pink.500"
+                  _hover={{ bg: "pink.700" }}
+                  leftIcon={
+                    !isLoading && !isFetching && <Icon as={TfiReload} />
+                  }
+                  onClick={handleButtonClick}
+                >
+                  {!isLoading && isFetching ? (
+                    <Spinner size="sm" color="gray.500" m="8" />
+                  ) : (
+                    "Atualizar"
+                  )}
+                </Button>
+                <Link href="/project/create" passHref>
+                  <Button
+                    size="sm"
+                    fontSize="sm"
+                    bgColor="pink.500"
+                    _hover={{ bg: "pink.700" }}
+                    leftIcon={<Icon as={RiAddLine} />}
+                  >
+                    Cadastrar novo
+                  </Button>
+                </Link>
+              </HStack>
+            </Flex>
           </Flex>
           {isLoading ? (
             <Flex justify="center">
