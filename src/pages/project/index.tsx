@@ -23,38 +23,11 @@ import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { TfiReload } from "react-icons/tfi";
 import Pagination from "../../components/Pagination";
 import Link from "next/link";
-import { useCallback, useEffect } from "react";
-import { useQuery } from "react-query";
+import { useCallback } from "react";
+import { useProject } from "../../services/hooks/useProject";
 
 export default function ProjectsList() {
-  const { data, isLoading, isFetching, error, refetch } = useQuery(
-    "projects",
-    async () => {
-      const response = await fetch("http://localhost:3000/api/projects");
-      const data = await response.json();
-
-      const projects = data.projects.map((project) => {
-        return {
-          id: project.id,
-          project: project.project,
-          languageUsed: project.languageUsed,
-          startDate: new Date(project.startDate).toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-          }),
-          deliveryDate: new Date(project.deliveryDate).toLocaleDateString(
-            "pt-BR",
-            { day: "2-digit", month: "long", year: "numeric" }
-          ),
-          projectStatus: project.projectStatus,
-        };
-      });
-
-      return projects;
-    }
-    // { staleTime: 1000 * 5 } // 5 segundos
-  );
+  const { data, isLoading, isFetching, error, refetch } = useProject();
 
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
 
@@ -169,7 +142,12 @@ export default function ProjectsList() {
                   })}
                 </Tbody>
               </Table>
-              <Pagination />
+              <Pagination
+                totalCountOfRegisters={10}
+                registerPerPage={1}
+                currentPage={4}
+                onPageChange={() => {}}
+              />
             </>
           )}
         </Box>

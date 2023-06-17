@@ -1,4 +1,4 @@
-import { Factory, Model, createServer } from "miragejs";
+import { Factory, Model, Response, createServer } from "miragejs";
 import { faker } from "@faker-js/faker";
 
 type Project = {
@@ -53,7 +53,19 @@ export function makeServer() {
       this.namespace = "api";
       this.timing = 750;
 
-      this.get("/projects");
+      this.get("/projects", function (schema, request) {
+        const { page = 1, per_page = 2 } = request.queryParams
+
+        const total = schema.all('project').length
+
+        const pageStart = (Number(page) - 1) * Number(per_page)
+        const pageEnd = pageStart + Number(per_page)
+
+        const projects = this.serialize(schema.all("project"))
+          .projects.slice(pageStart, pageEnd)
+
+        return new Response(200, { 'x-total-count': String(total) }, { projects })
+      });
 
       this.namespace = "";
       this.passthrough();
