@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { api } from "../api";
 
-type ProjectParamsResponse = {
+type Project = {
   id: string,
   project: string,
   languageUsed: string,
@@ -10,10 +10,20 @@ type ProjectParamsResponse = {
   projectStatus: string
 }
 
+type ProjectParamsResponse = {
+  totalCount: number
+  projects: Project[]
+}
 
-export async function getProjects(): Promise<ProjectParamsResponse[]> {
-  const { data } = await api.get("projects");
+export async function getProjects(page: number): Promise<ProjectParamsResponse> {
+  const { data, headers } = await api.get("projects", {
+    params: {
+      page
+    }
+  });
   // const data = await response.json();
+
+  const totalCount = Number(headers['x-total-count'])
 
   const projects = data.projects.map((project) => {
     return {
@@ -33,12 +43,15 @@ export async function getProjects(): Promise<ProjectParamsResponse[]> {
     };
   });
 
-  return projects;
+  return {
+    projects,
+    totalCount
+  }
 }
 
-export function useProject() {
+export function useProject(page: number) {
   return useQuery(
-    "projects", getProjects,
+    ["projects", page], () => getProjects(page),
     // { staleTime: 1000 * 5 } // 5 segundos
   );
 }

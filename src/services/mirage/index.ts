@@ -54,7 +54,7 @@ export function makeServer() {
       this.timing = 750;
 
       this.get("/projects", function (schema, request) {
-        const { page = 1, per_page = 2 } = request.queryParams
+        const { page = 1, per_page = 1 } = request.queryParams
 
         const total = schema.all('project').length
 

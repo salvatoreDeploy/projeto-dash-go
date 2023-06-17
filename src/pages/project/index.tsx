@@ -23,11 +23,13 @@ import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { TfiReload } from "react-icons/tfi";
 import Pagination from "../../components/Pagination";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useProject } from "../../services/hooks/useProject";
 
 export default function ProjectsList() {
-  const { data, isLoading, isFetching, error, refetch } = useProject();
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isFetching, error, refetch } = useProject(page);
 
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
 
@@ -103,7 +105,7 @@ export default function ProjectsList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((project) => {
+                  {data.projects.map((project) => {
                     return (
                       <>
                         <Tr key={project.id}>
@@ -143,10 +145,10 @@ export default function ProjectsList() {
                 </Tbody>
               </Table>
               <Pagination
-                totalCountOfRegisters={10}
+                totalCountOfRegisters={data.totalCount}
                 registerPerPage={1}
-                currentPage={4}
-                onPageChange={() => {}}
+                currentPage={page}
+                onPageChange={setPage}
               />
             </>
           )}
