@@ -4,6 +4,7 @@ import { api } from "../api";
 type Project = {
   id: string,
   project: string,
+  nameDeveloper: string;
   languageUsed: string,
   startDate: string,
   deliveryDate: string,
@@ -29,6 +30,7 @@ export async function getProjects(page: number): Promise<ProjectParamsResponse> 
     return {
       id: project.id,
       project: project.project,
+      nameDeveloper: project.nameDeveloper,
       languageUsed: project.languageUsed,
       startDate: new Date(project.startDate).toLocaleDateString("pt-BR", {
         day: "2-digit",

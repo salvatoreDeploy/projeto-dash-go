@@ -67,6 +67,8 @@ export function makeServer() {
         return new Response(200, { 'x-total-count': String(total) }, { projects })
       });
 
+      this.get("projects/:id")
+
       this.namespace = "";
       this.passthrough();
     },

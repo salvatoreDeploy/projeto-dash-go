@@ -16,15 +16,18 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  Link,
 } from "@chakra-ui/react";
 import Header from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { TfiReload } from "react-icons/tfi";
 import Pagination from "../../components/Pagination";
-import Link from "next/link";
+import NextLink from "next/link";
 import { useCallback, useState } from "react";
 import { useProject } from "../../services/hooks/useProject";
+import { queryClient } from "../../services/queryClient";
+import { api } from "../../services/api";
 
 export default function ProjectsList() {
   const [page, setPage] = useState(1);
@@ -36,6 +39,20 @@ export default function ProjectsList() {
   const handleButtonClick = useCallback(() => {
     refetch(); // Chama a função refetch para buscar novamente os dados
   }, [refetch]);
+
+  async function handlePrefetchProject(projectId: number | string) {
+    await queryClient.prefetchQuery(
+      ["project", projectId],
+      async () => {
+        const response = await api.get(`projects/${projectId}`);
+
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 10, // 10 minutos
+      }
+    );
+  }
 
   return (
     <Box>
@@ -65,7 +82,7 @@ export default function ProjectsList() {
                     "Atualizar"
                   )}
                 </Button>
-                <Link href="/project/create" passHref>
+                <NextLink href="/project/create" passHref>
                   <Button
                     size="sm"
                     fontSize="sm"
@@ -75,7 +92,7 @@ export default function ProjectsList() {
                   >
                     Cadastrar novo
                   </Button>
-                </Link>
+                </NextLink>
               </HStack>
             </Flex>
           </Flex>
@@ -114,10 +131,19 @@ export default function ProjectsList() {
                               <Checkbox colorScheme="pink" />
                             </LightMode>
                           </Td>
-                          <Td>Dash.Go</Td>
+                          <Td whiteSpace="nowrap">
+                            <Link
+                              color="purple.400"
+                              onMouseEnter={() =>
+                                handlePrefetchProject(project.id)
+                              }
+                            >
+                              {project.project}
+                            </Link>
+                          </Td>
                           <Td>
                             <Box>
-                              <Text fontWeight="bold">{project.project}</Text>
+                              <Text>{project.nameDeveloper}</Text>
                               <Text fontSize="sm" color="gray.300">
                                 liderhenrique@gmail.com
                               </Text>
