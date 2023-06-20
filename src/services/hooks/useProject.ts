@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { api } from "../api";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 
 type Project = {
   id: string,
@@ -31,17 +32,18 @@ export async function getProjects(page: number): Promise<ProjectParamsResponse> 
       id: project.id,
       project: project.project,
       nameDeveloper: project.nameDeveloper,
-      languageUsed: project.languageUsed,
+      languageUsed: capitalizeFirstLetter(project.languageUsed),
       startDate: new Date(project.startDate).toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "long",
         year: "numeric",
+        timeZone: 'UTC'
       }),
       deliveryDate: new Date(project.deliveryDate).toLocaleDateString(
         "pt-BR",
-        { day: "2-digit", month: "long", year: "numeric" }
+        { day: "2-digit", month: "long", year: "numeric", timeZone: 'UTC' }
       ),
-      projectStatus: project.projectStatus,
+      projectStatus: capitalizeFirstLetter(project.projectStatus)
     };
   });
 

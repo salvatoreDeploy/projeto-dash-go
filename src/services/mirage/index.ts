@@ -1,4 +1,4 @@
-import { Factory, Model, Response, createServer } from "miragejs";
+import { ActiveModelSerializer, Factory, Model, Response, RestSerializer, createServer } from "miragejs";
 import { faker } from "@faker-js/faker";
 
 type Project = {
@@ -11,10 +11,15 @@ type Project = {
 };
 
 type LanguageUsed = "Node" | "React";
-type ProjectStatus = "finalizado" | "desenvolvimento";
+type ProjectStatus = "Finalizado" | "Desenvolvimento";
 
 export function makeServer() {
   const server = createServer({
+
+    serializers: {
+      application: RestSerializer
+    },
+
     models: {
       project: Model.extend<Partial<Project>>({}),
     },
@@ -28,18 +33,19 @@ export function makeServer() {
           return `Developer-${i + 1}`;
         },
         startDate() {
-          return faker.date.recent(10);
+          return faker.date.past(10);
         },
         deliveryDate() {
-          return faker.date.recent(10);
+          const startDate = this.startDate;
+          return faker.date.between(startDate, new Date())
         },
         languageUsed() {
           return faker.helpers.arrayElement<LanguageUsed>(["Node", "React"]);
         },
         projectStatus() {
           return faker.helpers.arrayElement<ProjectStatus>([
-            "desenvolvimento",
-            "finalizado",
+            "Desenvolvimento",
+            "Finalizado",
           ]);
         },
       }),
@@ -53,7 +59,7 @@ export function makeServer() {
       this.namespace = "api";
       this.timing = 750;
 
-      this.get("/projects", function (schema, request) {
+      this.get("projects", function (schema, request) {
         const { page = 1, per_page = 1 } = request.queryParams
 
         const total = schema.all('project').length
@@ -67,7 +73,9 @@ export function makeServer() {
         return new Response(200, { 'x-total-count': String(total) }, { projects })
       });
 
-      this.get("projects/:id")
+      this.get("/project/:id")
+
+      this.post("/project")
 
       this.namespace = "";
       this.passthrough();

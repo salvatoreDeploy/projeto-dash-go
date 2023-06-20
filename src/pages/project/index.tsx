@@ -44,7 +44,7 @@ export default function ProjectsList() {
     await queryClient.prefetchQuery(
       ["project", projectId],
       async () => {
-        const response = await api.get(`projects/${projectId}`);
+        const response = await api.get(`project/${projectId}`);
 
         return response.data;
       },

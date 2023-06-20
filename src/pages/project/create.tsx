@@ -17,6 +17,10 @@ import Link from "next/link";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "react-query";
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
+import { useRouter } from "next/router";
 
 type RegisterProjectFormParamData = {
   project: string;
@@ -49,6 +53,25 @@ const registerProjectFormSchema = yup.object().shape({
 });
 
 export default function RegisterProject() {
+  const router = useRouter();
+
+  const registerProject = useMutation(
+    async (project: RegisterProjectFormParamData) => {
+      const response = await api.post("project", {
+        project: {
+          ...project,
+        },
+      });
+
+      return response.data.project;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("projects");
+      },
+    }
+  );
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(registerProjectFormSchema),
   });
@@ -58,9 +81,11 @@ export default function RegisterProject() {
   const handlerRegisterProject: SubmitHandler<
     RegisterProjectFormParamData
   > = async (value) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
     // console.log(value);
+
+    await registerProject.mutateAsync(value);
+    router.push("/project");
   };
 
   return (
